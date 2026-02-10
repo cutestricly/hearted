@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  width:100vw;
+  height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  color:white;
+  background:url("../assets/bg.jpg") center / cover no-repeat;
+  overflow:hidden;
+}
+
+/* BLUR OVERLAY */
+.overlay{
+  position:fixed;
+  inset:0;
+  backdrop-filter:blur(20px);
+  background:rgba(0,0,0,.28);
+}
+
+/* STATUS BAR */
+.status{
+  position:absolute;
+  top:12px;
+  left:18px;
+  right:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:14px;
+  z-index:10;
+}
+
+.status-right{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+/* ICONS */
+.icon{
+  width:18px;
+  height:12px;
+}
+
+/* LAYOUT */
+.container{
+  position:relative;
+  padding:70px 16px 150px;
+}
+
+/* TOP WIDGET ROW */
+.top{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+/* CARD */
+.card{
+  background:rgba(0,0,0,.45);
+  border-radius:22px;
+  padding:14px;
+}
+
+/* PHOTOS */
+.photos{
+  display:grid;
+  grid-template-rows:1fr 1fr;
+  gap:6px;
+}
+.photos img{
+  width:100%;
+  height:85px;
+  object-fit:cover;
+  border-radius:16px;
+}
+
+/* WEATHER */
+.weather h1{
+  font-size:42px;
+  margin:6px 0;
+}
+
+/* REMINDER */
+.reminder{
+  margin-top:14px;
+}
+.reminder-item{
+  display:flex;
+  gap:10px;
+  margin:10px 0;
+  opacity:.9;
+}
+
+/* MUSIC */
+.music{
+  margin-top:14px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.music img{
+  width:60px;
+  height:60px;
+  border-radius:14px;
+}
+
+/* APPS GRID */
+.apps{
+  margin-top:22px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+.app{
+  text-align:center;
+  font-size:12px;
+}
+.app img{
+  width:60px;
+  height:60px;
+  border-radius:14px;
+}
+.app span{
+  display:block;
+  margin-top:6px;
+}
+
+/* DOCK */
+.dock{
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(255,255,255,.28);
+  backdrop-filter:blur(18px);
+  border-radius:30px;
+  padding:14px 22px;
+  display:flex;
+  gap:26px;
+}
+.dock img{
+  width:58px;
+  height:58px;
+  border-radius:16px;
+}
+</style>
+</head>
+
+<body>
+<div class="overlay"></div>
+
+<!-- STATUS BAR -->
+<div class="status">
+  <div id="time">00:00</div>
+
+  <div class="status-right">
+    <!-- SIGNAL -->
+    <svg class="icon" viewBox="0 0 20 12">
+      <rect x="0" y="6" width="3" height="6" fill="white"/>
+      <rect x="5" y="4" width="3" height="8" fill="white"/>
+      <rect x="10" y="2" width="3" height="10" fill="white"/>
+      <rect x="15" y="0" width="3" height="12" fill="white"/>
+    </svg>
+
+    <!-- WIFI -->
+    <svg class="icon" viewBox="0 0 20 12">
+      <path d="M2 4c4-3 12-3 16 0" stroke="white" stroke-width="2" fill="none"/>
+      <path d="M5 7c3-2 7-2 10 0" stroke="white" stroke-width="2" fill="none"/>
+      <circle cx="10" cy="10" r="1.5" fill="white"/>
+    </svg>
+
+    <!-- BATTERY -->
+    <svg class="icon" viewBox="0 0 26 12">
+      <rect x="0" y="1" width="22" height="10" rx="2" stroke="white" stroke-width="1.5" fill="none"/>
+      <rect x="2" y="3" width="16" height="6" fill="white"/>
+      <rect x="23" y="4" width="3" height="4" rx="1" fill="white"/>
+    </svg>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TOP -->
+  <div class="top">
+    <div class="card photos">
+      <img src="../assets/photo1.jpg">
+      <img src="../assets/photo2.jpg">
+    </div>
+
+    <div class="card weather">
+      <div>Jakarta</div>
+      <h1>25°</h1>
+      <div>Cloudy</div>
+      <div>H:29° L:24°</div>
+    </div>
+  </div>
+
+  <!-- REMINDER -->
+  <div class="card reminder">
+    <strong>4 heart things</strong>
+    <div class="reminder-item">○ make him feel loved today</div>
+    <div class="reminder-item">○ tell him you're proud of him</div>
+    <div class="reminder-item">○ be his safe place</div>
+    <div class="reminder-item">○ be the reason he smiles</div>
+  </div>
+
+  <!-- MUSIC -->
+  <div class="card music">
+    <img src="../assets/music.jpg">
+    <div>
+      <div>Last Forever</div>
+      <small>LANY</small>
+    </div>
+  </div>
+
+  <!-- APPS -->
+  <div class="apps">
+    <div class="app" id="app1"><img src="../assets/1.jpg"><span></span></div>
+    <div class="app" id="app2"><img src="../assets/2.jpg"><span></span></div>
+    <div class="app" id="app3"><img src="../assets/3.jpg"><span></span></div>
+    <div class="app" id="app4"><img src="../assets/4.jpg"><span></span></div>
+  </div>
+
+</div>
+
+<!-- DOCK -->
+<div class="dock">
+  <img src="../assets/l.jpg">
+  <img src="../assets/o.jpg">
+  <img src="../assets/v.jpg">
+  <img src="../assets/e.jpg">
+</div>
+
+<script>
+function updateTime(){
+  const now = new Date();
+  let h = now.getHours().toString().padStart(2,"0");
+  let m = now.getMinutes().toString().padStart(2,"0");
+  document.getElementById("time").textContent = h + "." + m;
+}
+updateTime();
+setInterval(updateTime,1000);
+
+// Klik pada app1 membuka 1.html
+document.getElementById("app1").addEventListener("click", function() {
+    window.location.href = "1.html";
+});
+
+// Klik pada app1 membuka 3.html
+document.getElementById("app2").addEventListener("click", function() {
+    window.location.href = "2.html";
+});
+
+// Klik pada app1 membuka 3.html
+document.getElementById("app3").addEventListener("click", function() {
+    window.location.href = "3.html";
+});
+
+// Klik pada app1 membuka 4.html
+document.getElementById("app4").addEventListener("click", function() {
+    window.location.href = "4.html";
+});
+
+</script>
+
+</body>
+</html>
+ 

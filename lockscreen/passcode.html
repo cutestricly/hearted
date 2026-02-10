@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Passcode</title>
+
+<style>
+body {
+  margin:0;
+  width:100vw;
+  height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  color:white;
+  text-align:center;
+  background: transparent;
+  overflow:hidden;
+}
+
+/* BLUR BG */
+.bg-blur {
+  position: fixed;
+  inset: 0;
+  background: url("../assets/bg.jpg") center / cover no-repeat;
+  filter: blur(16px) brightness(0.85);
+  transform: scale(1.1);
+  z-index: -1;
+}
+
+/* FOTO FULLSCREEN */
+.fullscreen-photo {
+  position: fixed;
+  inset: 0;
+  background: url("../assets/photo.jpg") center / cover no-repeat;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.fullscreen-photo.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* TAMBAHAN: FADE OUT */
+.fullscreen-photo.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lock {
+  margin-top: 50px;
+  margin-bottom: 10px;
+}
+
+h2{margin:20px 0 30px;}
+
+.dots{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  margin-bottom:40px;
+}
+
+.dot{
+  width:14px;
+  height:14px;
+  border:2px solid white;
+  border-radius:50%;
+}
+
+.dot.fill{background:white}
+
+.keypad{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  padding:0 40px;
+}
+
+.key{
+  width:70px;
+  height:70px;
+  margin:auto;
+  border-radius:50%;
+  background:rgba(255,255,255,.25);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  font-size:28px;
+}
+
+.key small{font-size:11px;opacity:.8}
+
+.footer{
+  position:absolute;
+  bottom:30px;
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  padding:0 24px;
+  font-size:16px;
+  box-sizing:border-box;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-blur"></div>
+<div class="fullscreen-photo" id="unlockPhoto"></div>
+
+<div class="lock">
+  <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+    <path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="white" stroke-width="2"/>
+    <rect x="5" y="10" width="14" height="11" rx="3" stroke="white" stroke-width="2"/>
+    <circle cx="12" cy="15" r="1.5" fill="white"/>
+    <rect x="11.5" y="16.5" width="1" height="3" fill="white"/>
+  </svg>
+</div>
+
+<div class="lock unlocked" style="display:none">
+  <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+    <path d="M9 10V7a5 5 0 0 1 8 0" stroke="white" stroke-width="2"/>
+    <rect x="5" y="10" width="14" height="11" rx="3" stroke="white" stroke-width="2"/>
+    <circle cx="12" cy="15" r="1.5" fill="white"/>
+    <rect x="11.5" y="16.5" width="1" height="3" fill="white"/>
+  </svg>
+</div>
+
+<h2>Enter Passcode</h2>
+
+<div class="dots">
+  <div class="dot"></div><div class="dot"></div>
+  <div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="keypad" id="keys"></div>
+
+<div class="footer">
+  <div>Emergency</div>
+  <div onclick="clearPin()">Cancel</div>
+</div>
+
+<script>
+const correct="0308";
+let input="";
+
+const nums=[
+ ["1",""],["2","ABC"],["3","DEF"],
+ ["4","GHI"],["5","JKL"],["6","MNO"],
+ ["7","PQRS"],["8","TUV"],["9","WXYZ"],
+ ["",""],["0",""],["",""]
+];
+
+keys.innerHTML=nums.map(n=>`
+  <div class="key" onclick="press('${n[0]}')">
+    ${n[0]}<small>${n[1]}</small>
+  </div>`).join("");
+
+function press(n){
+  if(!n||input.length>=4)return;
+  input+=n;
+  updateDots();
+
+  if(input.length===4){
+    setTimeout(()=>{
+      if(input===correct){
+        document.querySelector(".lock").style.display="none";
+        document.querySelector(".unlocked").style.display="block";
+        document.getElementById("unlockPhoto").classList.add("show");
+      } else {
+        clearPin();
+      }
+    },200);
+  }
+}
+
+function updateDots(){
+  document.querySelectorAll(".dot").forEach((d,i)=>{
+    d.classList.toggle("fill",i<input.length);
+  });
+}
+
+function clearPin(){
+  input="";
+  updateDots();
+}
+
+/* TAMBAHAN: TAP FOTO → FADE OUT → HOME */
+const photo = document.getElementById("unlockPhoto");
+
+photo.addEventListener("click", () => {
+  photo.classList.remove("show");
+  photo.classList.add("hide");
+
+  setTimeout(() => {
+    window.location.href = "home.html"; // ganti kalau nama beda
+  }, 700);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chats</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body{
+  background:#000;
+  color:#fff;
+}
+
+/* ===== STATUS BAR ===== */
+.status{
+  height:32px;
+  padding:0 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:14px;
+}
+
+.status-right{
+  display:flex;
+  gap:6px;
+}
+
+.icon{
+  width:18px;
+  height:12px;
+}
+
+/* ===== HEADER ===== */
+.header{
+  padding:8px 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.header-btn:active{
+  transform:scale(.92);
+  background:#2c2c2e;
+}
+
+.header h1{
+  font-size:20px;
+  font-weight:600;
+}
+
+.header-btn{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#1c1c1e;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* ===== SEARCH ===== */
+.search{
+  margin:10px 14px;
+  background:#1c1c1e;
+  border-radius:12px;
+  padding:8px 12px;
+  color:#8e8e93;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:14px;
+}
+
+/* ===== CHAT LIST ===== */
+.chat-list{
+  margin-top:6px;
+}
+
+.chat{
+  display:flex;
+  align-items:center;
+  padding:10px 14px;
+  border-top:1px solid #1c1c1e;
+}
+
+.chat.pinned{
+  background:#0b0b0c;
+}
+
+.avatar{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  margin-right:12px;
+  object-fit:cover;
+}
+
+.chat-info{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-width:0; /* penting biar text bisa ellipsis */
+}
+
+.chat-name{
+  font-weight:600;
+  font-size:16px;
+  line-height:1.2;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.chat-msg{
+  font-size:14px;
+  color:#8e8e93;
+  margin-top:2px;
+}
+
+.chat-right{
+  text-align:right;
+}
+
+.time{
+  font-size:12px;
+  color:#8e8e93;
+}
+
+.pin-icon{
+  margin-top:6px;
+  width:14px;
+  height:14px;
+  opacity:.8;
+}
+
+/* ===== BOTTOM TAB BAR ===== */
+.tabbar{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:72px;
+  background:#0b0b0c;
+  border-top:1px solid #1c1c1e;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  padding-bottom:10px;
+}
+
+.tab{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  font-size:11px;
+  color:#8e8e93;
+}
+
+.tab svg{
+  width:24px;
+  height:24px;
+  fill:#8e8e93;
+}
+
+.tab.active{
+  color:#3da5ff;
+}
+
+.tab.active svg{
+  fill:#3da5ff;
+}
+
+.badge{
+  position:absolute;
+  top:-4px;
+  right:-10px;
+  background:#ff3b30;
+  color:#fff;
+  font-size:10px;
+  padding:2px 6px;
+  border-radius:12px;
+}
+
+.chat-list{
+  margin-bottom:80px;
+}
+
+/* ===== CHAT ROOM ===== */
+.chat-room{
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:none;
+  flex-direction:column;
+  z-index:999;
+}
+
+/* background wallpaper */
+.chat-bg{
+  position:absolute;
+  inset:0;
+  background:url("../assets/wallpaper.jpg") center/cover no-repeat;
+  filter:brightness(.95);
+}
+
+/* header chat */
+.chat-header{
+  position:relative;
+  z-index:2;
+  padding:8px 14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:rgba(20,20,22,.75);
+  backdrop-filter:blur(20px);
+}
+
+.back-btn{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#1c1c1e;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+}
+
+.chat-title{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start; 
+  gap:2px;
+  min-width:0;
+}
+
+.chat-title .name,
+.chat-title .status{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:200px;
+}
+.chat-header{
+  align-items:center;
+}
+
+.chat-header img{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  object-fit:cover;
+}
+
+/* messages */
+.messages{
+  position:relative;
+  z-index:2;
+  flex:1;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.bubble{
+  max-width:75%;
+  padding:10px 14px;
+  font-size:14px;
+  line-height:1.4;
+  border-radius:18px;
+}
+
+.left{
+  align-self:flex-start;
+  background:#2c2c2e;
+  color:#fff;
+}
+
+.right{
+  align-self:flex-end;
+  background:#f38bbf;
+  color:#fff;
+}
+
+/* input */
+.chat-input{
+  position:relative;
+  z-index:2;
+  padding:10px;
+  display:flex;
+  gap:10px;
+  background:rgba(20,20,22,.8);
+  backdrop-filter:blur(20px);
+}
+
+.chat-input input{
+  flex:1;
+  background:#2c2c2e;
+  border:none;
+  border-radius:20px;
+  padding:10px 14px;
+  color:#fff;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- STATUS BAR -->
+<div class="status">
+  <div id="time">00:00</div>
+  <div class="status-right">
+
+    <!-- SIGNAL -->
+    <svg class="icon" viewBox="0 0 20 12">
+      <rect x="0" y="6" width="3" height="6" fill="white"/>
+      <rect x="5" y="4" width="3" height="8" fill="white"/>
+      <rect x="10" y="2" width="3" height="10" fill="white"/>
+      <rect x="15" y="0" width="3" height="12" fill="white"/>
+    </svg>
+
+    <!-- WIFI -->
+    <svg class="icon" viewBox="0 0 20 12">
+      <path d="M2 4c4-3 12-3 16 0" stroke="white" stroke-width="2" fill="none"/>
+      <path d="M5 7c3-2 7-2 10 0" stroke="white" stroke-width="2" fill="none"/>
+      <circle cx="10" cy="10" r="1.5" fill="white"/>
+    </svg>
+
+    <!-- BATTERY -->
+    <svg class="icon" viewBox="0 0 26 12">
+      <rect x="0" y="1" width="22" height="10" rx="2" stroke="white" stroke-width="1.5" fill="none"/>
+      <rect x="2" y="3" width="16" height="6" fill="white"/>
+      <rect x="23" y="4" width="3" height="4" rx="1" fill="white"/>
+    </svg>
+
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-btn" id="exitBtn" title="Exit">
+  <!-- EXIT ICON (coding SVG) -->
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+    <path d="M16 17l5-5-5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M21 12H9" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <path d="M12 19a7 7 0 110-14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+</div>
+  <h1>Chats</h1>
+
+  <!-- COMPOSE ICON -->
+  <div class="header-btn">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25z" fill="white"/>
+      <path d="M20.7 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="white"/>
+    </svg>
+  </div>
+</div>
+
+<!-- SEARCH -->
+<div class="search">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <circle cx="11" cy="11" r="7" stroke="#8e8e93" stroke-width="2"/>
+    <line x1="16.65" y1="16.65" x2="22" y2="22" stroke="#8e8e93" stroke-width="2"/>
+  </svg>
+  Search
+</div>
+
+<!-- CHAT LIST -->
+<div class="chat-list">
+
+  <!-- PINNED CHAT -->
+  <div class="chat pinned">
+    <img src="../assets/edric.jpg" class="avatar">
+
+    <div class="chat-info">
+      <div class="chat-name">Edric Fielder</div>
+      <div class="chat-msg">typing…</div>
+    </div>
+
+    <div class="chat-right">
+      <div class="time">22:30</div>
+
+      <!-- PIN ICON -->
+      <svg class="pin-icon" viewBox="0 0 24 24" fill="none">
+        <path d="M9 3l6 6-2 2 5 5-1 1-5-5-2 2-6-6 5-5z" fill="#8e8e93"/>
+      </svg>
+    </div>
+  </div>
+<!-- BOTTOM TAB BAR -->
+<div class="tabbar">
+
+  <!-- CONTACTS -->
+  <div class="tab">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"/>
+    </svg>
+    Contacts
+  </div>
+
+  <!-- CALLS -->
+  <div class="tab">
+    <svg viewBox="0 0 24 24">
+      <path d="M6.6 10.8a15.5 15.5 0 006.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.9.6.6 0 1 .4 1 1V21c0 .6-.4 1-1 1C10.4 22 2 13.6 2 3c0-.6.4-1 1-1h4.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.9.1.4 0 .8-.3 1.1l-2.2 2.2z"/>
+    </svg>
+    Calls
+  </div>
+
+  <!-- CHATS (ACTIVE) -->
+  <div class="tab active" style="position:relative">
+    <svg viewBox="0 0 24 24">
+      <path d="M4 4h16v12H7l-3 3V4z"/>
+    </svg>
+    <span class="badge">175</span>
+    Chats
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="tab">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 8a4 4 0 100 8 4 4 0 000-8zm9 4l-2.1-.7a7.9 7.9 0 00-.6-1.4l1.3-1.8-2.1-2.1-1.8 1.3c-.5-.2-1-.4-1.4-.6L12 3l-1 .3-1 .3-.7 2.1c-.5.2-1 .4-1.4.6L6.1 5l-2.1 2.1 1.3 1.8c-.2.5-.4 1-.6 1.4L3 12l.3 1 .3 1 .7 2.1c.2.5.4 1 .6 1.4l-1.3 1.8 2.1 2.1 1.8-1.3c.5.2 1 .4 1.4.6l.7 2.1L12 21l1-.3 1-.3.7-2.1c.5-.2 1-.4 1.4-.6l1.8 1.3 2.1-2.1-1.3-1.8c.2-.5.4-1 .6-1.4L21 12z"/>
+    </svg>
+    Settings
+  </div>
+
+</div>
+
+<!-- CHAT ROOM -->
+<div class="chat-room" id="chatRoom">
+
+  <div class="chat-bg"></div>
+
+  <!-- HEADER -->
+  <div class="chat-header">
+    <div class="back-btn" id="backBtn">‹</div>
+
+    <div class="chat-title">
+      <div class="name">Edric Fielder</div>
+      <div class="status">last seen recently</div>
+    </div>
+
+    <img src="../assets/edric.jpg">
+  </div>
+
+  <!-- MESSAGES -->
+  <div class="messages">
+
+    <div class="bubble left">
+      happy 5 months, sayang. i just want you to know that these five months with you have been one of the happiest chapters of my life
+    </div>
+
+    <div class="bubble right">
+      happy 5 months, bebe. honestly, time feels so fast with you because being with you always feels safe, warm, and full of love
+    </div>
+
+    <div class="bubble left">
+      thank you for choosing me every day, for being patient with me, and for loving me in a way i never thought i deserved
+    </div>
+
+    <div class="bubble right">
+      and thank you for always making me feel important, for understanding me, and for turning ordinary days into beautiful memories
+    </div>
+
+    <div class="bubble left">
+      five months down, and i still want you for all the months, years, and moments ahead
+    </div>
+
+    <div class="bubble right">
+      then stay with me, okay? because i plan to love you a little more every single day
+    </div>
+
+  </div>
+
+  <!-- INPUT -->
+  <div class="chat-input">
+    <input type="text" placeholder="Message">
+  </div>
+
+</div>
+</div>
+
+<script>
+function updateTime(){
+  const now = new Date();
+  let h = now.getHours().toString().padStart(2,'0');
+  let m = now.getMinutes().toString().padStart(2,'0');
+  document.getElementById('time').innerText = h + ":" + m;
+}
+updateTime();
+setInterval(updateTime, 1000);
+
+
+const chatItem = document.querySelector(".chat");
+const chatRoom = document.getElementById("chatRoom");
+const backBtn = document.getElementById("backBtn");
+
+chatItem.addEventListener("click", () => {
+  chatRoom.style.display = "flex";
+});
+
+backBtn.addEventListener("click", () => {
+  chatRoom.style.display = "none";
+});
+
+
+const exitBtn = document.getElementById("exitBtn");
+
+exitBtn.addEventListener("click", () => {
+  window.location.href = "home.html"; // ganti kalau nama filenya beda
+});
+
+</script>
+
+</body>
+</html>

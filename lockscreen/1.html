@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spotify</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  background:#0e0e0e;
+  color:white;
+}
+
+/* STATUS BAR */
+.status{
+  height:40px;
+  padding:0 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:14px;
+}
+.status-right{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+.icon{width:18px;height:12px}
+
+/* HEADER */
+.header{
+  padding:12px 16px;
+}
+.back{
+  font-size:22px;
+  opacity:.9;
+}
+
+/* PLAYLIST */
+.playlist{
+  padding:10px 16px 20px;
+}
+.cover{
+  width:120px;
+  height:120px;
+  border-radius:6px;
+  object-fit:cover;
+}
+.playlist-title{
+  font-size:28px;
+  font-weight:700;
+  margin:16px 0 6px;
+}
+.creator{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:14px;
+  opacity:.8;
+}
+.creator img{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+}
+
+/* ACTIONS */
+.actions{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px 10px;
+}
+.actions-left{
+  display:flex;
+  gap:18px;
+  font-size:22px;
+}
+.play-big{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:#1db954;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:black;
+  font-size:26px;
+  cursor:pointer;
+}
+
+/* SONG LIST */
+.list{
+  padding-bottom:120px;
+}
+.song{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:10px 16px;
+  cursor:pointer;
+}
+.song.active{
+  background:#1a1a1a;
+}
+.song img{
+  width:52px;
+  height:52px;
+  border-radius:6px;
+}
+.song-title{
+  font-size:16px;
+}
+.song-artist{
+  font-size:13px;
+  opacity:.6;
+}
+
+/* MINI PLAYER */
+.player{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#1b1b1b;
+  padding:10px 14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.player img{
+  width:48px;
+  height:48px;
+  border-radius:6px;
+}
+.play-btn{
+  margin-left:auto;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:#1db954;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:black;
+  font-size:18px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- STATUS BAR -->
+<div class="status">
+  <div id="time">00:00</div>
+  <div class="status-right">
+    <svg class="icon" viewBox="0 0 20 12">
+      <rect x="0" y="6" width="3" height="6" fill="white"/>
+      <rect x="5" y="4" width="3" height="8" fill="white"/>
+      <rect x="10" y="2" width="3" height="10" fill="white"/>
+      <rect x="15" y="0" width="3" height="12" fill="white"/>
+    </svg>
+    <svg class="icon" viewBox="0 0 20 12">
+      <path d="M2 4c4-3 12-3 16 0" stroke="white" stroke-width="2" fill="none"/>
+      <path d="M5 7c3-2 7-2 10 0" stroke="white" stroke-width="2" fill="none"/>
+      <circle cx="10" cy="10" r="1.5" fill="white"/>
+    </svg>
+    <svg class="icon" viewBox="0 0 26 12">
+      <rect x="0" y="1" width="22" height="10" rx="2" stroke="white" stroke-width="1.5" fill="none"/>
+      <rect x="2" y="3" width="16" height="6" fill="white"/>
+      <rect x="23" y="4" width="3" height="4" rx="1" fill="white"/>
+    </svg>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="back" onclick="goHome()">‹</div>
+</div>
+
+<!-- PLAYLIST -->
+<div class="playlist">
+  <img src="../assets/cover.jpg" class="cover">
+  <div class="playlist-title">waiting to see you</div>
+  <div class="creator">
+    <img src="../assets/profile.jpg">
+    paw • 13 min
+  </div>
+</div>
+
+<!-- ACTIONS -->
+<div class="actions">
+  <div class="actions-left">⬇ ⤴ ⋯</div>
+  <div class="play-big" onclick="togglePlay()">▶</div>
+</div>
+
+<!-- SONG LIST -->
+<div class="list">
+  <div class="song" onclick="playSong(0)">
+    <img src="../assets/lastforever.jpg">
+    <div>
+      <div class="song-title">Last Forever</div>
+      <div class="song-artist">LANY</div>
+    </div>
+  </div>
+
+  <div class="song" onclick="playSong(1)">
+    <img src="../assets/constant.jpg">
+    <div>
+      <div class="song-title">Constant</div>
+      <div class="song-artist">Jeremy Passion</div>
+    </div>
+  </div>
+
+  <div class="song" onclick="playSong(2)">
+    <img src="../assets/king.jpg">
+    <div>
+      <div class="song-title">King Of My Heart</div>
+      <div class="song-artist">Taylor Swift</div>
+    </div>
+  </div>
+
+  <div class="song" onclick="playSong(3)">
+    <img src="../assets/oned.jpg">
+    <div>
+      <div class="song-title">They Don't Know About Us</div>
+      <div class="song-artist">One Direction</div>
+    </div>
+  </div>
+</div>
+
+<!-- MINI PLAYER -->
+<div class="player">
+  <img id="playerCover" src="../assets/lastforever.jpg">
+  <div>
+    <div id="playerTitle" class="song-title">Last Forever</div>
+    <div id="playerArtist" class="song-artist">LANY</div>
+  </div>
+  <div class="play-btn" onclick="togglePlay()">▶</div>
+</div>
+
+<audio id="audio"></audio>
+
+<script>
+/* JAM */
+function updateTime(){
+  const d=new Date();
+  document.getElementById("time").textContent =
+    d.getHours().toString().padStart(2,"0")+":"+
+    d.getMinutes().toString().padStart(2,"0");
+}
+updateTime();
+setInterval(updateTime,1000);
+
+/* MUSIC */
+const audio = document.getElementById("audio");
+const playBtns = document.querySelectorAll(".play-btn, .play-big");
+const songsEl = document.querySelectorAll(".song");
+
+const songs = [
+  {
+    src:"../assets/lastforever.mp3",
+    title:"Last Forever",
+    artist:"LANY",
+    cover:"../assets/lastforever.jpg"
+  },
+  {
+    src:"../assets/constant.mp3",
+    title:"Constant",
+    artist:"Jeremy Passion",
+    cover:"../assets/constant.jpg"
+  },
+  {
+    src:"../assets/king.mp3",
+    title:"King Of My Heart",
+    artist:"Taylor Swift",
+    cover:"../assets/king.jpg"
+  },
+  {
+    src:"../assets/oned.mp3",
+    title:"They Don't Know About Us",
+    artist:"One Direction",
+    cover:"../assets/oned.jpg"
+  }
+];
+
+let current = 0;
+let playing = false;
+
+function playSong(index){
+  current = index;
+  audio.src = songs[index].src;
+  audio.play();
+  playing = true;
+  updateUI();
+}
+
+function togglePlay(){
+  if(!audio.src){
+    playSong(0);
+    return;
+  }
+  playing ? audio.pause() : audio.play();
+  playing = !playing;
+  updateUI();
+}
+
+function updateUI(){
+  playBtns.forEach(b=>b.textContent = playing ? "⏸" : "▶");
+  document.getElementById("playerTitle").textContent = songs[current].title;
+  document.getElementById("playerArtist").textContent = songs[current].artist;
+  document.getElementById("playerCover").src = songs[current].cover;
+  songsEl.forEach((s,i)=>s.classList.toggle("active",i===current));
+}
+
+function goHome(){
+  window.location.href = "home.html";
+}
+
+</script>
+
+</body>
+</html>

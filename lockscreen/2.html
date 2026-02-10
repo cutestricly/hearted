@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photos</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+body{
+  background:#000;
+  color:#fff;
+  overflow-x:hidden;
+}
+
+/* ===== STATUS BAR ===== */
+.status{
+  height:32px;
+  padding:0 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:14px;
+}
+
+.status-right{display:flex;gap:6px;}
+.icon{width:18px;height:12px;}
+
+/* ===== GRID ===== */
+.grid{
+  padding:8px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.photo{
+  aspect-ratio:1/1;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  cursor:pointer;
+}
+
+/* ADD */
+.add{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+  background:#1c1c1e;
+  color:#3da5ff;
+}
+
+/* ===== FULLSCREEN VIEW ===== */
+.viewer{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  backdrop-filter:blur(30px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+  opacity:0;
+  pointer-events:none;
+  transition:.35s ease;
+}
+
+.viewer.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.viewer img{
+  max-width:100%;
+  max-height:100%;
+  transform:scale(.85);
+  transition:.35s ease;
+}
+
+.viewer.active img{
+  transform:scale(1);
+}
+</style>
+</head>
+
+<body>
+
+<!-- STATUS BAR -->
+<div class="status">
+  <div id="time">00.00</div>
+  <div class="status-right">
+    <svg class="icon" viewBox="0 0 20 12">
+      <rect x="0" y="6" width="3" height="6" fill="white"/>
+      <rect x="5" y="4" width="3" height="8" fill="white"/>
+      <rect x="10" y="2" width="3" height="10" fill="white"/>
+      <rect x="15" y="0" width="3" height="12" fill="white"/>
+    </svg>
+    <svg class="icon" viewBox="0 0 20 12">
+      <path d="M2 4c4-3 12-3 16 0" stroke="white" stroke-width="2" fill="none"/>
+      <path d="M5 7c3-2 7-2 10 0" stroke="white" stroke-width="2" fill="none"/>
+      <circle cx="10" cy="10" r="1.5" fill="white"/>
+    </svg>
+    <svg class="icon" viewBox="0 0 26 12">
+      <rect x="0" y="1" width="22" height="10" rx="2" stroke="white" stroke-width="1.5" fill="none"/>
+      <rect x="2" y="3" width="16" height="6" fill="white"/>
+      <rect x="23" y="4" width="3" height="4" rx="1" fill="white"/>
+    </svg>
+  </div>
+</div>
+
+<!-- GRID FOTO -->
+<div class="grid">
+  <div class="photo"><img src="../assets/img1.jpg"></div>
+  <div class="photo"><img src="../assets/img2.jpg"></div>
+  <div class="photo"><img src="../assets/img3.jpg"></div>
+  <div class="photo"><img src="../assets/img4.jpg"></div>
+  <div class="photo"><img src="../assets/img5.jpg"></div>
+  <div class="photo"><img src="../assets/img6.jpg"></div>
+  <div class="photo"><img src="../assets/img7.jpg"></div>
+  <div class="photo"><img src="../assets/img8.jpg"></div>
+  <div class="photo add">+</div>
+</div>
+
+<!-- FULLSCREEN VIEW -->
+<div class="viewer" id="viewer">
+  <img id="viewerImg">
+</div>
+
+<script>
+/* TIME */
+function updateTime(){
+  const d=new Date();
+  document.getElementById("time").innerText =
+    d.getHours().toString().padStart(2,'0')+"."+
+    d.getMinutes().toString().padStart(2,'0');
+}
+updateTime();
+setInterval(updateTime,1000);
+
+/* AUTO SLIDE VIEWER */
+const photos = [...document.querySelectorAll('.photo img')];
+const viewer = document.getElementById('viewer');
+const viewerImg = document.getElementById('viewerImg');
+
+let index = 0;
+let autoSlide;
+
+photos.forEach((img,i)=>{
+  img.addEventListener('click',()=>{
+    index = i;          // mulai dari foto yang ditekan
+    openViewer();
+  });
+});
+
+function openViewer(){
+  viewerImg.src = photos[index].src;
+  viewer.classList.add('active');
+
+  autoSlide = setInterval(()=>{
+    index++;
+
+    if(index < photos.length){
+      viewerImg.src = photos[index].src;
+    }else{
+      clearInterval(autoSlide);
+      viewer.classList.remove('active');
+
+      setTimeout(()=>{
+        window.location.href = "home.html";
+      },300);
+    }
+  },1200); // kecepatan auto slide (ms)
+}
+
+/* TAP untuk close manual */
+viewer.addEventListener('click',()=>{
+  clearInterval(autoSlide);
+  viewer.classList.remove('active');
+});
+</script>
+
+</body>
+</html>
