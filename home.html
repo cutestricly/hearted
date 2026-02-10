@@ -10,11 +10,12 @@
 body{
   margin:0;
   width:100vw;
-  height:100vh;
+  min-height:100vh;
   font-family:-apple-system,BlinkMacSystemFont,sans-serif;
   color:white;
   background:url("assets/bg.jpg") center / cover no-repeat;
-  overflow:hidden;
+  overflow-x:hidden;
+  overflow-y:auto;
 }
 
 /* BLUR OVERLAY */
@@ -23,6 +24,7 @@ body{
   inset:0;
   backdrop-filter:blur(20px);
   background:rgba(0,0,0,.28);
+  pointer-events:none;
 }
 
 /* STATUS BAR */
@@ -136,7 +138,7 @@ body{
 
 /* DOCK */
 .dock{
-  position:absolute;
+  position:fixed;
   bottom:20px;
   left:50%;
   transform:translateX(-50%);
@@ -232,7 +234,13 @@ body{
 
 </div>
 
-
+<!-- DOCK -->
+<div class="dock">
+  <img src="l.jpg">
+  <img src="o.jpg">
+  <img src="v.jpg">
+  <img src="e.jpg">
+</div>
 
 <script>
 function updateTime(){
