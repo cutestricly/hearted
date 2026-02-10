@@ -270,9 +270,14 @@ body{
   z-index:2;
   flex:1;
   padding:14px;
+  padding-bottom:20px;
   display:flex;
   flex-direction:column;
   gap:10px;
+
+  overflow-y:auto;       
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
 }
 
 .bubble{
